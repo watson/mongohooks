@@ -1,4 +1,12 @@
+# MongoHooks
+
 A thin before/after filter extension for the mongojs node-module.
+
+## Install
+
+```
+npm install mongohooks
+```
 
 ## Usage
 
@@ -48,3 +56,7 @@ mongohooks(db.mycollection)
 // Now just use the reqular mongojs API
 db.mycollection.find({ ... }, function (err, res) {...});
 ```
+
+## License
+
+MIT
