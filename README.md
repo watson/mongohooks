@@ -1,6 +1,7 @@
 # MongoHooks
 
-A thin before/after filter extension for the mongojs node-module.
+A thin before/after filter extension for the
+[mongojs](https://github.com/mafintosh/mongojs) node-module.
 
 ## Install
 
