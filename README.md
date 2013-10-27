@@ -3,6 +3,9 @@
 A thin before/after filter extension for the
 [mongojs](https://github.com/mafintosh/mongojs) node-module.
 
+[![build
+status](https://secure.travis-ci.org/watson/mongohooks.png)](http://travis-ci.org/watson/mongohooks)
+
 ## Install
 
 ```
