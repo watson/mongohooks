@@ -50,7 +50,7 @@ mongohooks(db.mycollection).onDocument(function (document, next) {
   next(new Error());
 });
 
-// Filters can be changed and multiple filters of the same type can be added
+// Filters can be chained and multiple filters of the same type can be added
 mongohooks(db.mycollection)
   .onUpdate(function (query, <update>, next) {...})
   .onFind(function (criteria, <projection>, next) {...})
