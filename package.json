@@ -1,0 +1,30 @@
+{
+  "name": "mongohooks",
+  "version": "0.1.0",
+  "description": "A thin before/after filter extension for the mongojs node-module",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mongojs": "~0.9.6"
+    "mocha": "~1.13.0"
+  },
+  "author": "Thomas Watson Steen <w@tson.dk>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/watson/mongohooks.git"
+  },
+  "keywords": [
+    "mongo",
+    "mongodb",
+    "mongojs",
+    "filters",
+    "hooks",
+    "database"
+  ],
+  "bugs": {
+    "url": "https://github.com/watson/mongohooks/issues"
+  }
+}
