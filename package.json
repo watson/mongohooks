@@ -7,7 +7,7 @@
     "test": "mocha"
   },
   "devDependencies": {
-    "mongojs": "~0.9.6"
+    "mongojs": "~0.9.6",
     "mocha": "~1.13.0"
   },
   "author": "Thomas Watson Steen <w@tson.dk>",
