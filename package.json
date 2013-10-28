@@ -22,7 +22,8 @@
     "mongojs",
     "filters",
     "hooks",
-    "database"
+    "database",
+    "middleware"
   ],
   "bugs": {
     "url": "https://github.com/watson/mongohooks/issues"
