@@ -27,7 +27,7 @@ mongohooks(db.mycollection).onInsert(function (document, next) {...});
 // Add a before filter to db.mycollection.update
 mongohooks(db.mycollection).onUpdate(function (query, <update>, next) {...});
 
-// Add a before filter to db.mycollection.onFind
+// Add a before filter to db.mycollection.find
 mongohooks(db.mycollection).onFind(function (criteria, <projection>, next) {...});
 
 // Add an after filter to db.mycollection.find and db.mycollection.findOne
