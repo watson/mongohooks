@@ -61,6 +61,13 @@ mongohooks(db.mycollection)
 db.mycollection.find({ ... }, function (err, res) {...});
 ```
 
+# Disclamer
+
+This module was hacked together in a post-drunken state at a [Copenhagen
+Node.js Hackathon](http://www.meetup.com/Copenhagen-Node-js-Hackathon/)
+[event](http://www.meetup.com/Copenhagen-Node-js-Hackathon/events/142963512/)
+in just a few hours. Bugs might exist.
+
 ## License
 
 MIT
