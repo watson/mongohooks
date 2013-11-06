@@ -185,7 +185,7 @@ describe('mongohooks', function () {
     });
 
     it("should pass on errors to the final callback", function (done) {
-      mongohooks.onDocument(function (criteria, next) {
+      mongohooks.onDocument(function (document, next) {
         next(new Error('foo'));
       });
       db.mongohooks.find({}, function (err) {
