@@ -58,6 +58,7 @@ exports = module.exports = function (collection) {
   injectFindFilters = function (fn) {
     var stubArgs = [undefined, undefined, undefined];
     var wrap = function (fn, cursor, args) {
+      var projection = args.length >= 2 ? args[1] : {};
       return function (callback) {
         callback = callback || noop;
 
@@ -69,13 +70,13 @@ exports = module.exports = function (collection) {
             if (err) return callback(err);
             var filter = documentFilters[filterIndex++];
             if (!filter) return callback(null, res);
-            if (!Array.isArray(res)) return filter(res, nextFilter);
+            if (!Array.isArray(res)) return filter(res, projection, nextFilter);
             var docIndex = 0;
             var nextDoc = function (err) {
               if (err) return callback(err);
               var doc = res[docIndex++];
               if (!doc) return nextFilter();
-              filter(doc, nextDoc);
+              filter(doc, projection, nextDoc);
             };
             nextDoc();
           };

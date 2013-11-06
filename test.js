@@ -164,7 +164,7 @@ describe('mongohooks', function () {
     });
 
     it("should be transparent", function (done) {
-      mongohooks.onDocument(function (document, next) {
+      mongohooks.onDocument(function (document, projection, next) {
         next();
       });
       db.mongohooks.findOne({}, function (err, res) {
@@ -175,7 +175,7 @@ describe('mongohooks', function () {
     });
 
     it("should call the after filter", function (done) {
-      mongohooks.onDocument(function (document, next) {
+      mongohooks.onDocument(function (document, projection, next) {
         assert.document(document);
         assert.equal('function', typeof next);
         assert.equal(1, next.length);
@@ -184,8 +184,16 @@ describe('mongohooks', function () {
       db.mongohooks.find({ foo: 1 }, noop);
     });
 
+    it("should forward the projection", function (done) {
+      mongohooks.onDocument(function (document, projection, next) {
+        assert.deepEqual({ bar: 1 }, projection);
+        done();
+      });
+      db.mongohooks.find({ foo: 1 }, { bar: 1 }, noop);
+    });
+
     it("should pass on errors to the final callback", function (done) {
-      mongohooks.onDocument(function (document, next) {
+      mongohooks.onDocument(function (document, projection, next) {
         next(new Error('foo'));
       });
       db.mongohooks.find({}, function (err) {

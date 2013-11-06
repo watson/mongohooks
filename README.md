@@ -32,7 +32,7 @@ mongohooks(db.mycollection).onFind(function (criteria, <projection>, next) {...}
 
 // Add an after filter to db.mycollection.find and db.mycollection.findOne
 // The after filter is called once for each document in a returned result.
-mongohooks(db.mycollection).onDocument(function (document, next) {...});
+mongohooks(db.mycollection).onDocument(function (document, projection, next) {...});
 
 // Filters are async: Call the `next` callback when you are done
 mongohooks(db.mycollection).onFind(function (criteria, next) {
@@ -46,7 +46,7 @@ mongohooks(db.mycollection).onFind(function (criteria, next) {
 });
 
 // After-filters can also parse on errors
-mongohooks(db.mycollection).onDocument(function (document, next) {
+mongohooks(db.mycollection).onDocument(function (document, projection, next) {
   next(new Error());
 });
 
@@ -55,7 +55,7 @@ mongohooks(db.mycollection)
   .onUpdate(function (query, <update>, next) {...})
   .onFind(function (criteria, <projection>, next) {...})
   .onFind(function (criteria, <projection>, next) {...})
-  .onDocument(function (document, next) {...});
+  .onDocument(function (document, projection, next) {...});
 
 // Now just use the reqular mongojs API
 db.mycollection.find({ ... }, function (err, res) {...});
