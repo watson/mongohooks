@@ -46,7 +46,7 @@ exports = module.exports = function (collection) {
         if (err) return callback(err);
         var filter = filters[index++];
         if (!filter) return fn.apply(collection, args.concat(callback));
-        filter.apply(null, args
+        filter.apply(collection, args
             .concat(stubArgs)
             .slice(0, filter.length-1)
             .concat(next));
@@ -89,7 +89,7 @@ exports = module.exports = function (collection) {
           if (err) return callback(err);
           var filter = findFilters[index++];
           if (!filter) return fn.call(cursor, afterFilter);
-          filter.apply(null, args
+          filter.apply(collection, args
               .concat(stubArgs)
               .slice(0, filter.length-1)
               .concat(next));

@@ -50,6 +50,15 @@ mongohooks(db.mycollection).onDocument(function (document, projection, next) {
   next(new Error());
 });
 
+// Use the `this` keyword to access the collection
+mongohooks(db.mycollection).onUpdate(function (query, update, next) {
+  // perform a find before each update
+  this.findOne({ foo: 1 }, function (err, result) {
+    // do stuff
+    next();
+  });
+});
+
 // Filters can be chained and multiple filters of the same type can be added
 mongohooks(db.mycollection)
   .onUpdate(function (query, <update>, next) {...})
