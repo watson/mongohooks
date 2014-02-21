@@ -9,23 +9,23 @@ exports = module.exports = function (collection) {
       chainer, injectBeforeFilters, injectBeforeFindFilters, injectAfterFilters;
 
   chainer = {
-    onSave: function (filter) {
+    save: function (filter) {
       saveFilters.push(filter);
       return chainer;
     },
-    onInsert: function (filter) {
+    insert: function (filter) {
       insertFilters.push(filter);
       return chainer;
     },
-    onUpdate: function (filter) {
+    update: function (filter) {
       updateFilters.push(filter);
       return chainer;
     },
-    onFind: function (filter) {
+    find: function (filter) {
       findFilters.push(filter);
       return chainer;
     },
-    onDocument: function (filter) {
+    document: function (filter) {
       documentFilters.push(filter);
       return chainer;
     }

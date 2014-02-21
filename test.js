@@ -19,9 +19,9 @@ describe('mongohooks', function () {
     db.mongohooks.remove({}, done);
   });
 
-  describe("#onSave", function () {
+  describe("#save", function () {
     it("should be transparent", function (done) {
-      mongohooks.onSave(function (document, next) {
+      mongohooks.save(function (document, next) {
         next();
       });
       db.mongohooks.save({ foo: 1 }, function (err, res) {
@@ -32,7 +32,7 @@ describe('mongohooks', function () {
     });
 
     it("should call the before filter", function (done) {
-      mongohooks.onSave(function (document, next) {
+      mongohooks.save(function (document, next) {
         assert.deepEqual({ foo: 1 }, document);
         assert.equal('function', typeof next);
         assert.equal(1, next.length);
@@ -42,7 +42,7 @@ describe('mongohooks', function () {
     });
 
     it("should't complete if the callback ins't called", function (done) {
-      mongohooks.onSave(function (document, next) {});
+      mongohooks.save(function (document, next) {});
       db.mongohooks.save({ foo: 1 }, function () {
         throw new Error('Should not call save');
       });
@@ -50,7 +50,7 @@ describe('mongohooks', function () {
     });
 
     it("should be abortable", function (done) {
-      mongohooks.onSave(function (document, next) {
+      mongohooks.save(function (document, next) {
         next(new Error('foo'));
       });
       db.mongohooks.save({ foo: 1 }, function (err) {
@@ -65,13 +65,13 @@ describe('mongohooks', function () {
     });
   });
 
-  describe("#onFindOne", function () {
+  describe("#findOne", function () {
     beforeEach(function (done) {
       db.mongohooks.insert({ foo: 1 }, done);
     });
 
     it("should be transparent", function (done) {
-      mongohooks.onFind(function (criteria, next) {
+      mongohooks.find(function (criteria, next) {
         next();
       });
       db.mongohooks.findOne({}, function (err, res) {
@@ -82,7 +82,7 @@ describe('mongohooks', function () {
     });
 
     it("should call the before filter", function (done) {
-      mongohooks.onFind(function (criteria, next) {
+      mongohooks.find(function (criteria, next) {
         assert.deepEqual({ bar: 1 }, criteria);
         assert.equal('function', typeof next);
         assert.equal(1, next.length);
@@ -92,7 +92,7 @@ describe('mongohooks', function () {
     });
 
     it("should't complete if the callback ins't called", function (done) {
-      mongohooks.onFind(function (criteria, next) {});
+      mongohooks.find(function (criteria, next) {});
       db.mongohooks.findOne({}, function () {
         throw new Error('Should not call save');
       });
@@ -100,7 +100,7 @@ describe('mongohooks', function () {
     });
 
     it("should be abortable", function (done) {
-      mongohooks.onFind(function (criteria, next) {
+      mongohooks.find(function (criteria, next) {
         next(new Error('foo'));
       });
       db.mongohooks.findOne({}, function (err) {
@@ -111,13 +111,13 @@ describe('mongohooks', function () {
     });
   });
 
-  describe("#onFind", function () {
+  describe("#find", function () {
     beforeEach(function (done) {
       db.mongohooks.insert({ foo: 1 }, done);
     });
 
     it("should be transparent", function (done) {
-      mongohooks.onFind(function (criteria, next) {
+      mongohooks.find(function (criteria, next) {
         next();
       });
       db.mongohooks.find({}, function (err, res) {
@@ -129,7 +129,7 @@ describe('mongohooks', function () {
     });
 
     it("should call the before filter", function (done) {
-      mongohooks.onFind(function (criteria, next) {
+      mongohooks.find(function (criteria, next) {
         assert.deepEqual({ bar: 1 }, criteria);
         assert.equal('function', typeof next);
         assert.equal(1, next.length);
@@ -139,7 +139,7 @@ describe('mongohooks', function () {
     });
 
     it("should't complete if the callback ins't called", function (done) {
-      mongohooks.onFind(function (criteria, next) {});
+      mongohooks.find(function (criteria, next) {});
       db.mongohooks.find({}, function () {
         throw new Error('Should not call save');
       });
@@ -147,7 +147,7 @@ describe('mongohooks', function () {
     });
 
     it("should be abortable", function (done) {
-      mongohooks.onFind(function (criteria, next) {
+      mongohooks.find(function (criteria, next) {
         next(new Error('foo'));
       });
       db.mongohooks.find({}, function (err) {
@@ -158,13 +158,13 @@ describe('mongohooks', function () {
     });
   });
 
-  describe("#onDocument", function () {
+  describe("#document", function () {
     beforeEach(function (done) {
       db.mongohooks.insert({ foo: 1 }, done);
     });
 
     it("should be transparent", function (done) {
-      mongohooks.onDocument(function (document, projection, next) {
+      mongohooks.document(function (document, projection, next) {
         next();
       });
       db.mongohooks.findOne({}, function (err, res) {
@@ -175,7 +175,7 @@ describe('mongohooks', function () {
     });
 
     it("should call the after filter", function (done) {
-      mongohooks.onDocument(function (document, projection, next) {
+      mongohooks.document(function (document, projection, next) {
         assert.document(document);
         assert.equal('function', typeof next);
         assert.equal(1, next.length);
@@ -185,7 +185,7 @@ describe('mongohooks', function () {
     });
 
     it("should forward the projection", function (done) {
-      mongohooks.onDocument(function (document, projection, next) {
+      mongohooks.document(function (document, projection, next) {
         assert.deepEqual({ bar: 1 }, projection);
         done();
       });
@@ -193,7 +193,7 @@ describe('mongohooks', function () {
     });
 
     it("should pass on errors to the final callback", function (done) {
-      mongohooks.onDocument(function (document, projection, next) {
+      mongohooks.document(function (document, projection, next) {
         next(new Error('foo'));
       });
       db.mongohooks.find({}, function (err) {
