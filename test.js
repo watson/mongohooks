@@ -19,7 +19,7 @@ describe('mongohooks', function () {
     db.mongohooks.remove({}, done);
   });
 
-  describe("#save", function () {
+  describe("#save()", function () {
     it("should be transparent", function (done) {
       mongohooks.save(function (document, next) {
         next();
@@ -65,7 +65,7 @@ describe('mongohooks', function () {
     });
   });
 
-  describe("#findOne", function () {
+  describe("#findOne()", function () {
     beforeEach(function (done) {
       db.mongohooks.insert({ foo: 1 }, done);
     });
@@ -111,7 +111,7 @@ describe('mongohooks', function () {
     });
   });
 
-  describe("#find", function () {
+  describe("#find()", function () {
     beforeEach(function (done) {
       db.mongohooks.insert({ foo: 1 }, done);
     });
@@ -158,7 +158,7 @@ describe('mongohooks', function () {
     });
   });
 
-  describe("#document", function () {
+  describe("#document()", function () {
     beforeEach(function (done) {
       db.mongohooks.insert({ foo: 1 }, done);
     });

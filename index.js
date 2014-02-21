@@ -1,3 +1,5 @@
+'use strict';
+
 var noop = function () {};
 
 exports = module.exports = function (collection) {
@@ -6,7 +8,7 @@ exports = module.exports = function (collection) {
       updateFilters = [],
       findFilters = [],
       documentFilters = [],
-      chainer, injectBeforeFilters, injectBeforeFindFilters, injectAfterFilters;
+      chainer, injectBeforeFilters, injectFindFilters;
 
   chainer = {
     save: function (filter) {
@@ -31,6 +33,16 @@ exports = module.exports = function (collection) {
     }
   };
 
+  // Arguments:
+  //   fn      : the original mongojs function
+  //   filters : the filters that should be run before `fn` is called
+  //
+  // Loop though all the `filters` and execute each with the same arguments as
+  // would be passed to `fn` + an extra `next` callback.
+  //
+  // When the `filter` calls the `next` callback, the next `filter` in the
+  // chain of `filters` is called, until finally there are no more `filters`,
+  // in which case the original `fn` is finally called.
   injectBeforeFilters = function (fn, filters) {
     var stubArgs = [undefined, undefined, undefined];
     return function () {
@@ -46,10 +58,13 @@ exports = module.exports = function (collection) {
         if (err) return callback(err);
         var filter = filters[index++];
         if (!filter) return fn.apply(collection, args.concat(callback));
-        filter.apply(collection, args
+        filter.apply(
+          collection,
+          args
             .concat(stubArgs)
             .slice(0, filter.length-1)
-            .concat(next));
+            .concat(next)
+        );
       };
       next();
     };
