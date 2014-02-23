@@ -24,9 +24,9 @@ describe('mongohooks', function () {
       mongohooks.save(function (document, next) {
         next();
       });
-      db.mongohooks.save({ foo: 1 }, function (err, res) {
+      db.mongohooks.save({ foo: 1 }, function (err, result) {
         assert.ifError(err);
-        assert.document(res);
+        assert.document(result);
         done();
       });
     });
@@ -74,9 +74,9 @@ describe('mongohooks', function () {
       mongohooks.find(function (criteria, next) {
         next();
       });
-      db.mongohooks.findOne({}, function (err, res) {
+      db.mongohooks.findOne({}, function (err, result) {
         assert.ifError(err);
-        assert.document(res);
+        assert.document(result);
         done();
       });
     });
@@ -120,10 +120,10 @@ describe('mongohooks', function () {
       mongohooks.find(function (criteria, next) {
         next();
       });
-      db.mongohooks.find({}, function (err, res) {
+      db.mongohooks.find({}, function (err, result) {
         assert.ifError(err);
-        assert(Array.isArray(res));
-        assert.document(res[0]);
+        assert(Array.isArray(result));
+        assert.document(result[0]);
         done();
       });
     });
@@ -167,9 +167,9 @@ describe('mongohooks', function () {
       mongohooks.document(function (document, projection, next) {
         next();
       });
-      db.mongohooks.findOne({}, function (err, res) {
+      db.mongohooks.findOne({}, function (err, result) {
         assert.ifError(err);
-        assert.document(res);
+        assert.document(result);
         done();
       });
     });
