@@ -124,15 +124,15 @@ Mongohooks also acts as an event-emitter, notifying you after calls to either `.
 
 Add listeners using the `.on()` function, which takes two arguments: The event to listen to (`save`, `insert` or `update`) and a callback function to call when the event is emitted. The format of the callback function is `callback(error, result, <arg1>, <arg2>, <...>)`.
 
-The first two arguments is always the `error` and `result` normally passed to the mongojs callback, followed by the arguments of the mongojs function that triggerd the event. E.g. if you listen for `update` events, expect 5 arguments in the callback: `error`, `lastErrorObject`, `query`, `update`, and `options`:
+The first two arguments is always the `error` and `result` normally passed to the mongojs callback, followed by the arguments of the mongojs function that triggerd the event. E.g. if you listen for `update` events, expect 5 arguments in the callback: `error`, `result`, `query`, `update`, and `options`:
 
 ```javascript
-mongohooks(db.members).on('save', function (error, lastErrorObject, query, update, options) {
-  // error           : null (unless something went wrong)
-  // lastErrorObject : { ... }
-  // query           : { _id: "foo" }
-  // update          : { name: "Anders" }
-  // options         : undefined (since no options object was passed to the update function)
+mongohooks(db.members).on('save', function (error, result, query, update, options) {
+  // error   : null (unless something went wrong)
+  // result  : { ... } (in case of the save command, this will be a lastErrorObject)
+  // query   : { _id: "foo" }
+  // update  : { name: "Anders" }
+  // options : undefined (since no options object was passed to the update function)
 });
 
 // perform the update
