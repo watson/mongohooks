@@ -1,6 +1,17 @@
 'use strict';
 
+var clone = require('clone');
 var noop = function () {};
+
+var injectAfter = function (fn, injectFn) {
+  return function () {
+    var args = arguments;
+    fn.apply(null, args);
+    process.nextTick(function () {
+      injectFn.apply(null, args);
+    });
+  };
+};
 
 exports = module.exports = function (collection) {
   var saveFilters = [],
@@ -8,6 +19,7 @@ exports = module.exports = function (collection) {
       updateFilters = [],
       findFilters = [],
       documentFilters = [],
+      listeners = { save: [], insert: [], update: [] },
       chainer, injectBeforeFilters, injectFindFilters;
 
   chainer = {
@@ -30,12 +42,17 @@ exports = module.exports = function (collection) {
     document: function (filter) {
       documentFilters.push(filter);
       return chainer;
+    },
+    on: function (event, filter) {
+      listeners[event].push(filter);
+      return chainer;
     }
   };
 
   // Arguments:
-  //   fn      : the original mongojs function
-  //   filters : the filters that should be run before `fn` is called
+  //   fn        : the original mongojs function
+  //   filters   : the filters that should be run before `fn` is called
+  //   listeners : the listeners that have subscribed to `fn` events
   //
   // Loop though all the `filters` and execute each with the same arguments as
   // would be passed to `fn` + an extra `next` callback.
@@ -43,16 +60,27 @@ exports = module.exports = function (collection) {
   // When the `filter` calls the `next` callback, the next `filter` in the
   // chain of `filters` is called, until finally there are no more `filters`,
   // in which case the original `fn` is finally called.
-  injectBeforeFilters = function (fn, filters) {
+  injectBeforeFilters = function (fn, filters, listeners) {
     var stubArgs = [undefined, undefined, undefined];
     return function () {
       var index = 0,
           args = Array.prototype.slice.call(arguments),
           callback = noop,
-          next;
+          origArgs, next;
 
-      if (typeof args[args.length-1] === 'function')
+      if (typeof args[args.length-1] === 'function') {
         callback = args.pop();
+
+        if (listeners.length > 0) {
+          origArgs = clone(args);
+          callback = injectAfter(callback, function () {
+            var listenerArgs = Array.prototype.slice.call(arguments).concat(origArgs);
+            listeners.forEach(function (listener) {
+              listener.apply(collection, listenerArgs);
+            });
+          });
+        }
+      }
 
       next = function (err) {
         if (err) return callback(err);
@@ -131,9 +159,9 @@ exports = module.exports = function (collection) {
     };
   };
 
-  collection.save   = injectBeforeFilters(collection.save, saveFilters);
-  collection.insert = injectBeforeFilters(collection.insert, insertFilters);
-  collection.update = injectBeforeFilters(collection.update, updateFilters);
+  collection.save   = injectBeforeFilters(collection.save, saveFilters, listeners.save);
+  collection.insert = injectBeforeFilters(collection.insert, insertFilters, listeners.insert);
+  collection.update = injectBeforeFilters(collection.update, updateFilters, listeners.update);
   collection.find   = injectFindFilters(collection.find);
 
   return chainer;

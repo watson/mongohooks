@@ -203,4 +203,68 @@ describe('mongohooks', function () {
       });
     });
   });
+
+  describe('#on()', function () {
+    beforeEach(function (done) {
+      db.mongohooks.insert({ foo: 1 }, done);
+    });
+
+    it('should call listener for save events', function (done) {
+      var cbCount = 2;
+      var assertDone = function () {
+        if (!--cbCount) done();
+      };
+      mongohooks.on('save', function (err, result, lastErrorObject, document) {
+        assert.ifError(err);
+        assert.document(result);
+        assert.equal(lastErrorObject.n, 0);
+        assert.deepEqual(document, { foo: 1 });
+        assertDone();
+      });
+      db.mongohooks.save({ foo: 1 }, function (err, result) {
+        assert.ifError(err);
+        assert.document(result);
+        assertDone();
+      });
+    });
+
+    it('should call listener for insert events', function (done) {
+      var cbCount = 2;
+      var assertDone = function () {
+        if (!--cbCount) done();
+      };
+      mongohooks.on('insert', function (err, result, lastErrorObject, document) {
+        assert.ifError(err);
+        assert.document(result);
+        assert.equal(lastErrorObject.n, 0);
+        assert.deepEqual(document, { foo: 1 });
+        assertDone();
+      });
+      db.mongohooks.insert({ foo: 1 }, function (err, result) {
+        assert.ifError(err);
+        assert.document(result);
+        assertDone();
+      });
+    });
+
+    it('should call listener for update events', function (done) {
+      var cbCount = 2;
+      var assertDone = function () {
+        if (!--cbCount) done();
+      };
+      mongohooks.on('update', function (err, lastErrorObject, query, update, options) {
+        assert.ifError(err);
+        assert(lastErrorObject.updatedExisting);
+        assert.deepEqual(query, { foo: 1 });
+        assert.deepEqual(update, { foo: 1, bar: 1 });
+        assert.strictEqual(options, undefined);
+        assertDone();
+      });
+      db.mongohooks.update({ foo: 1 }, { foo: 1, bar: 1 }, function (err, lastErrorObject) {
+        assert.ifError(err);
+        assert(lastErrorObject.updatedExisting);
+        assertDone();
+      });
+    });
+  });
 });
