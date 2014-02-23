@@ -148,7 +148,8 @@ mongohooks(db.members)
   .update(function (query, <update>, <options> next) {...})
   .find(function (criteria, <projection>, next) {...})
   .find(function (criteria, <projection>, next) {...})
-  .document(function (document, projection, next) {...});
+  .document(function (document, projection, next) {...})
+  .on('save', function (err, result, document) {...});
 ```
 
 ## Todo
